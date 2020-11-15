@@ -1,16 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Main where
 
-import Control.Lens hiding (argument)
 import Control.Monad
 import Control.Monad.Catch
 import Network.HTTP.Client
 import Network.HTTP.Client.TLS
 import Network.HTTP.Types.Header
-import Network.HTTP.Types.Version
 import Options.Applicative
 import Text.HTML.Scalpel
 import Text.HTML.Scalpel.Yomikatawa
@@ -18,13 +17,15 @@ import Text.URI
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text as T
-import qualified Data.Text.Encoding as T
 import qualified Data.Text.IO as T
 
 data ProgramOptions -- ^for scalability
 	= Search'ProgramOptions
 		{ category'Search'ProgramOptions :: Category
 		, inputWord'Search'ProgramOptions :: T.Text
+		, printRomaji'Search'ProgramOptions :: Bool
+		, printRandomWords'Search'ProgramOptions :: Bool
+		, printSameReadingWords'Search'ProgramOptions :: Bool
 		}
 	| Version'ProgramOptions
 	deriving (Show, Eq)
@@ -36,7 +37,7 @@ programOptionsParser = version <|> search
 		( short 'v'
 		<> long "version"
 		)
-	search = Search'ProgramOptions <$> search_category <*> search_input_word
+	search = Search'ProgramOptions <$> search_category <*> search_input_word <*> print_romaji <*> print_random_words <*> print_same_reading_words
 	search_category :: Parser Category
 	search_category = sei <|> mei <|> kanji <|> pure Kanji
 		where
@@ -58,6 +59,21 @@ programOptionsParser = version <|> search
 	search_input_word = T.pack <$> argument str
 		( metavar "INPUT_WORD"
 		)
+	print_romaji = switch
+		( short 'r'
+		<> long "print-romaji"
+		<> help "Print romaji"
+		)
+	print_random_words = switch
+		( short 'R'
+		<> long "print-random-words"
+		<> help "Print random words"
+		)
+	print_same_reading_words = switch
+		( short 'e'
+		<> long "print-same-reading-words"
+		<> help "Print words with same reading"
+		)
 
 genericUserAgent :: BS.ByteString
 genericUserAgent = "python-requests/2.25.0"
@@ -72,8 +88,8 @@ main = do
 	execParser $ info (programOptionsParser <**> helper) (fullDesc <> progDesc "A haskell CLI for https://yomikatawa.com")
 	>>= \case
 		Version'ProgramOptions -> putStrLn "0.1.0.0"
-		Search'ProgramOptions category input_word -> do
-			uri <- mkSearchURI category input_word
+		Search'ProgramOptions{..} -> do
+			uri <- mkSearchURI category'Search'ProgramOptions inputWord'Search'ProgramOptions
 			mgr <- newTlsManager
 			req' <- parseRequest (renderStr uri)
 			let req = req'
@@ -91,10 +107,10 @@ main = do
 				Just (Left err) -> throwM err
 				Just (Right x) -> do
 					T.putStrLn $ "Hiragana: " <> resultHiragana x
-					case resultRomaji x of
+					when printRomaji'Search'ProgramOptions $ case resultRomaji x of
 						Nothing -> pure ()
 						Just y -> T.putStrLn $ "Romaji: " <> y
-					unless (null $ resultSameReadingWords x) $ do
+					when (printSameReadingWords'Search'ProgramOptions && (not . null $ resultSameReadingWords x)) $ do
 						T.putStrLn $ "Same reading: " <> (T.intercalate ", " $ resultSameReadingWords x)
-					unless (null $ resultRandomWords x) $ do
+					when (printRandomWords'Search'ProgramOptions && (not . null $ resultRandomWords x)) $ do
 						T.putStrLn $ "Random words: " <> (T.intercalate ", " $ resultRandomWords x)
