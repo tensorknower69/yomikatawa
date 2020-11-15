@@ -1,0 +1,66 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           yomikatawa
+version:        0.1.0.0
+synopsis:       A haskell scalpel scraper/CLI for https://yomikatawa.com
+description:    Please go to README.md on the GitHub page.
+homepage:       https://github.com/tensorknower69/hs-yomikatawa#readme
+bug-reports:    https://github.com/tensorknower69/hs-yomikatawa/issues
+author:         tensorknower69
+maintainer:     tensorknower69
+copyright:      2020 tensorknower69
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/tensorknower69/hs-yomikatawa
+
+library
+  exposed-modules:
+      Text.HTML.Scalpel.Yomikatawa
+  other-modules:
+      Paths_yomikatawa
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wno-tabs
+  build-depends:
+      base >=4.13 && <5
+    , exceptions
+    , lens
+    , modern-uri
+    , scalpel-core
+    , tagsoup
+    , text
+  default-language: Haskell2010
+
+executable yomikatawa
+  main-is: Yomikatawa/Main.hs
+  other-modules:
+      Paths_yomikatawa
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wno-tabs -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.13 && <5
+    , bytestring
+    , exceptions
+    , http-client
+    , http-client-tls
+    , http-types
+    , lens
+    , modern-uri
+    , optparse-applicative
+    , scalpel
+    , scalpel-core
+    , tagsoup
+    , text
+    , yomikatawa
+  default-language: Haskell2010

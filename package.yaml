@@ -1,0 +1,46 @@
+name: "yomikatawa"
+version: 0.1.0.0
+author: "tensorknower69"
+github: "tensorknower69/hs-yomikatawa"
+synopsis: "A haskell scalpel scraper/CLI for https://yomikatawa.com"
+description: "Please go to README.md on the GitHub page."
+license: MIT
+copyright: "2020 tensorknower69"
+
+extra-source-files:
+  - README.md
+
+dependencies:
+  - base >= 4.13 && < 5
+  - text
+  - tagsoup
+  - scalpel-core
+  - modern-uri
+  - exceptions
+  - lens
+
+library:
+  source-dirs: src
+  ghc-options:
+    - -Wall
+    - -Wno-tabs
+
+executables:
+  yomikatawa:
+    main: Yomikatawa/Main.hs
+    source-dirs: app
+    ghc-options:
+      - -Wall
+      - -Wno-tabs
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - yomikatawa
+      - scalpel
+      - http-client
+      - http-client-tls
+      - http-types
+      - bytestring
+      - optparse-applicative
+      - exceptions
