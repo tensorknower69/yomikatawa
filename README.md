@@ -23,6 +23,7 @@ Available options:
   -h,--help                Show this help text
 ```
 
+## Examples
 ### Search
 ```bash
 $ yomikatawa -r -R -e 自身
