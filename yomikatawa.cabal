@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           yomikatawa
-version:        0.1.0.0
+version:        0.1.0.1
 synopsis:       A haskell scalpel scraper/CLI for https://yomikatawa.com
 description:    Please go to README.md on the GitHub page.
 homepage:       https://github.com/tensorknower69/hs-yomikatawa#readme
@@ -36,6 +36,7 @@ library
     , exceptions
     , lens
     , modern-uri
+    , mtl
     , scalpel-core
     , tagsoup
     , text
@@ -57,10 +58,39 @@ executable yomikatawa
     , http-types
     , lens
     , modern-uri
+    , mtl
     , optparse-applicative
     , scalpel
     , scalpel-core
     , tagsoup
+    , text
+    , yomikatawa
+  default-language: Haskell2010
+
+test-suite yomikatawa-test
+  type: exitcode-stdio-1.0
+  main-is: Test.hs
+  other-modules:
+      Paths_yomikatawa
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wno-tabs -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.13 && <5
+    , bytestring
+    , directory
+    , exceptions
+    , filepath
+    , http-client
+    , http-client-tls
+    , http-types
+    , lens
+    , modern-uri
+    , mtl
+    , scalpel-core
+    , tagsoup
+    , tasty
+    , tasty-hunit
     , text
     , yomikatawa
   default-language: Haskell2010

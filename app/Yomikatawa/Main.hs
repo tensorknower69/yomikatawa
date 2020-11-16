@@ -87,7 +87,7 @@ main :: IO ()
 main = do
 	execParser $ info (programOptionsParser <**> helper) (fullDesc <> progDesc "A haskell CLI for https://yomikatawa.com")
 	>>= \case
-		Version'ProgramOptions -> putStrLn "0.1.0.0"
+		Version'ProgramOptions -> putStrLn "0.1.0.1"
 		Search'ProgramOptions{..} -> do
 			uri <- mkSearchURI category'Search'ProgramOptions inputWord'Search'ProgramOptions
 			mgr <- newTlsManager
@@ -104,13 +104,17 @@ main = do
 
 			case scrapeStringLike (responseBody rep) yomikatawaScraper of
 				Nothing -> throwM $ ScalpelException (responseBody rep)
+				Just (Left ErrorOccurred) -> do
+					putStrLn $ "Error occurred due to input: " <> T.unpack inputWord'Search'ProgramOptions <> "\nMost likely due to invalid input like '+'."
 				Just (Left err) -> throwM err
-				Just (Right x) -> do
-					T.putStrLn $ "Hiragana: " <> resultHiragana x
-					when printRomaji'Search'ProgramOptions $ case resultRomaji x of
+				Just (Right r) -> do
+					when (resultMayNotBeCorrect r) $ do
+						putStrLn $ "[!] The translation may not be correct, please check with other dictionary sites."
+					T.putStrLn $ "Hiragana: " <> resultHiragana r
+					when printRomaji'Search'ProgramOptions $ case resultRomaji r of
 						Nothing -> pure ()
 						Just y -> T.putStrLn $ "Romaji: " <> y
-					when (printSameReadingWords'Search'ProgramOptions && (not . null $ resultSameReadingWords x)) $ do
-						T.putStrLn $ "Same reading: " <> (T.intercalate ", " $ resultSameReadingWords x)
-					when (printRandomWords'Search'ProgramOptions && (not . null $ resultRandomWords x)) $ do
-						T.putStrLn $ "Random words: " <> (T.intercalate ", " $ resultRandomWords x)
+					when (printSameReadingWords'Search'ProgramOptions && (not . null $ resultSameReadingWords r)) $ do
+						T.putStrLn $ "Same reading: " <> (T.intercalate ", " $ resultSameReadingWords r)
+					when (printRandomWords'Search'ProgramOptions && (not . null $ resultRandomWords r)) $ do
+						T.putStrLn $ "Random words: " <> (T.intercalate ", " $ resultRandomWords r)
