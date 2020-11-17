@@ -1,7 +1,7 @@
 name: "yomikatawa"
 version: 0.1.0.1
 author: "tensorknower69"
-github: "tensorknower69/hs-yomikatawa"
+github: "tensorknower69/yomikatawa"
 synopsis: "A haskell scalpel scraper/CLI for https://yomikatawa.com"
 description: "Please go to README.md on the GitHub page."
 license: MIT
