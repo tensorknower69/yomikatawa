@@ -1,5 +1,5 @@
 name: "yomikatawa"
-version: 0.1.0.1
+version: 0.1.0.2
 author: "tensorknower69"
 github: "tensorknower69/yomikatawa"
 synopsis: "A haskell scalpel scraper/CLI for https://yomikatawa.com"

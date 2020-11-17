@@ -87,7 +87,7 @@ main :: IO ()
 main = do
 	execParser $ info (programOptionsParser <**> helper) (fullDesc <> progDesc "A haskell CLI for https://yomikatawa.com")
 	>>= \case
-		Version'ProgramOptions -> putStrLn "0.1.0.1"
+		Version'ProgramOptions -> putStrLn "0.1.0.2"
 		Search'ProgramOptions{..} -> do
 			uri <- mkSearchURI category'Search'ProgramOptions inputWord'Search'ProgramOptions
 			mgr <- newTlsManager

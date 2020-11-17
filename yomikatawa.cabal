@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           yomikatawa
-version:        0.1.0.1
+version:        0.1.0.2
 synopsis:       A haskell scalpel scraper/CLI for https://yomikatawa.com
 description:    Please go to README.md on the GitHub page.
 homepage:       https://github.com/tensorknower69/yomikatawa#readme
