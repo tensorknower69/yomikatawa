@@ -9,6 +9,7 @@ copyright: "2020 tensorknower69"
 
 extra-source-files:
   - README.md
+  - CHANGELOG.md
 
 dependencies:
   - base >= 4.13 && < 5
