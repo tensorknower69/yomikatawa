@@ -1,7 +1,7 @@
-# hs-yomikatawa
+# yomikatawa
 A haskell CLI for https://yomikatawa.com
 
-The python version: https://github.com/tensorknower69/yomikatawa.
+Python version (don't use it): https://github.com/tensorknower69/yomikatawa-py.
 
 ## Usage
 ### Help
@@ -35,7 +35,7 @@ Random words: 齧り散らし, 優位性, 順三, 月並み, 秋雄, 立中, 林
 
 ## Installation
 ```bash
-$ git clone https://github.com/tensorknower69/hs-yomikatawa
+$ git clone https://github.com/tensorknower69/yomikatawa
 $ cd hs-yomikatawa
 $ stack install
 ```
