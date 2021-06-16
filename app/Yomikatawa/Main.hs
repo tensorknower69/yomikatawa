@@ -18,6 +18,8 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
+import Paths_yomikatawa (version)
+import Data.Version (showVersion)
 
 data ProgramOptions -- ^for scalability
   = Search'ProgramOptions
@@ -31,11 +33,12 @@ data ProgramOptions -- ^for scalability
   deriving (Show, Eq)
 
 programOptionsParser :: Parser ProgramOptions
-programOptionsParser = version <|> search
+programOptionsParser = version_ <|> search
   where
-  version = flag' Version'ProgramOptions
+  version_ = flag' Version'ProgramOptions
     ( short 'v'
     <> long "version"
+    <> help "Print version"
     )
   search = Search'ProgramOptions <$> search_category <*> search_input_word <*> print_romaji <*> print_random_words <*> print_same_reading_words
   search_category :: Parser Category
@@ -87,7 +90,7 @@ main :: IO ()
 main = do
   execParser $ info (programOptionsParser <**> helper) (fullDesc <> progDesc "A haskell CLI for https://yomikatawa.com")
   >>= \case
-    Version'ProgramOptions -> putStrLn "0.1.0.2"
+    Version'ProgramOptions -> putStrLn (showVersion version)
     Search'ProgramOptions{..} -> do
       uri <- mkSearchURI category'Search'ProgramOptions inputWord'Search'ProgramOptions
       mgr <- newTlsManager
