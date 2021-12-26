@@ -5,7 +5,7 @@ github: "tensorknower69/yomikatawa"
 synopsis: "A haskell scalpel scraper/CLI for https://yomikatawa.com"
 description: "Please go to README.md on the GitHub page."
 license: MIT
-copyright: "2020 tensorknower69"
+copyright: "2020-2022 tensorknower69"
 
 extra-source-files:
   - README.md
